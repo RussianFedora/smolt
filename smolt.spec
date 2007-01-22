@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.4
-Release: 2%{?dist}
+Version: 0.5
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -9,7 +9,7 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 # Note: This is a link to the gzip, you can't download it directly
 # This will get fixed as soon as hosted can create attachments directly
 
-Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.gz
+Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -57,7 +57,7 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 rm -rf %{buildroot}
 
 %post
-if ! -s %{_sysconfdir}/sysconfig/hw-uuid
+if ! -f %{_sysconfdir}/sysconfig/hw-uuid
 then
     /bin/cat /proc/sys/kernel/random/uuid > %{_sysconfdir}/sysconfig/hw-uuid
     /bin/chmod 0644 %{_sysconfdir}/sysconfig/hw-uuid
@@ -76,6 +76,10 @@ fi
 %{_datadir}/%{name}/server
 
 %changelog
+* Thu Jan 22 2007 Mike McGrath <imlinux@gmail.com> 0.5-1
+- Upstream released new version
+- Fixed small bug in post
+
 * Thu Jan 18 2006 Mike McGrath <imlinux@gmail.com> 0.4-2
 - Added comment about the not directly available tar-gzip file
 
