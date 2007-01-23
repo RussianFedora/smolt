@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -27,7 +27,7 @@ This package contains the client
 Summary: Fedora hardware profiler server
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
-Requires: turbogears
+Requires: TurboGears
 
 %description server
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -76,6 +76,9 @@ fi
 %{_datadir}/%{name}/server
 
 %changelog
+* Thu Jan 22 2007 Mike McGrath <imlinux@gmail.com> 0.5-2
+- s/turbogears/TurboGears/
+
 * Thu Jan 22 2007 Mike McGrath <imlinux@gmail.com> 0.5-1
 - Upstream released new version
 - Fixed small bug in post
