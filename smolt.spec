@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -57,7 +57,7 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 rm -rf %{buildroot}
 
 %post
-if ! -f %{_sysconfdir}/sysconfig/hw-uuid
+if ! [ -f %{_sysconfdir}/sysconfig/hw-uuid ]
 then
     /bin/cat /proc/sys/kernel/random/uuid > %{_sysconfdir}/sysconfig/hw-uuid
     /bin/chmod 0644 %{_sysconfdir}/sysconfig/hw-uuid
@@ -76,6 +76,9 @@ fi
 %{_datadir}/%{name}/server
 
 %changelog
+* Thu Jan 24 2007 Mike McGrath <imlinux@gmail.com> 0.5-3
+- Fixed silly bash syntax error
+
 * Thu Jan 22 2007 Mike McGrath <imlinux@gmail.com> 0.5-2
 - s/turbogears/TurboGears/
 
