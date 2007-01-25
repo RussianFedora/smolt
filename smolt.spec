@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.5
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -13,7 +13,7 @@ Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStar
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: /usr/bin/wget
+Requires: dbus-python
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -76,7 +76,10 @@ fi
 %{_datadir}/%{name}/server
 
 %changelog
-* Thu Jan 24 2007 Mike McGrath <imlinux@gmail.com> 0.5-3
+* Thu Jan 25 2007 Mike McGrath <imlinux@gmail.com> 0.5-4
+- Forgot Requires of dbus-python
+
+* Wed Jan 24 2007 Mike McGrath <imlinux@gmail.com> 0.5-3
 - Fixed silly bash syntax error
 
 * Thu Jan 22 2007 Mike McGrath <imlinux@gmail.com> 0.5-2
