@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.6.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -14,7 +14,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
 Requires: dbus-python
+%ifnarch sparc sparc64
 Requires: /usr/bin/lsb_release
+%endif
 
 # If firstboot is installed
 #Requires: firstboot
@@ -102,6 +104,9 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Tue Jan 30 2007 Mike McGrath <imlinux@gmail.com> 0.6.1-3
+- Removed LSB requirement for sparc
+
 * Tue Jan 30 2007 Mike McGrath <imlinux@gmail.com> 0.6.1-2
 - Added firstboot
 - Upstream released new version
