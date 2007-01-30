@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.5
-Release: 4%{?dist}
+Version: 0.6.1
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -14,6 +14,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
 Requires: dbus-python
+Requires: /usr/bin/lsb_release
+
+# If firstboot is installed
+#Requires: firstboot
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -37,6 +41,15 @@ information other than the physical hardware information and basic OS info.
 
 This package contains the server portion
 
+%package firstboot
+Summary: Fedora hardware profile firstboot
+Group: Applications/Internet
+Requires: smolt = %{version}-%{release}
+
+%description firstboot
+This provides firstboot integration for smolt.  It has been broken into a
+separate package so firstboot isn't a requisite to use smolt.
+
 %prep
 %setup -q
 
@@ -51,7 +64,15 @@ This package contains the server portion
 %{__cp} -adv hw-client/* %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
+%{__mkdir} -p %{buildroot}/%{_bindir}
+%{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
+%{__cp} -adv firstboot/smolt.py %{buildroot}/%{_datadir}/firstboot/modules/
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
+
+ln -s %{_datadir}/%{name}/client/readProfile.py %{buildroot}/%{_bindir}/smoltPrint
+ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
+%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/sendProfile.py
+%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/readProfile.py
 
 %clean
 rm -rf %{buildroot}
@@ -69,13 +90,26 @@ fi
 %doc README GPL 
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/client
+%{_bindir}/%{name}*
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
 
 %files server
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/server
 
+%files firstboot
+%defattr(-,root,root,-)
+%{_datadir}/firstboot/modules/smolt.py
+
 %changelog
+* Tue Jan 30 2007 Mike McGrath <imlinux@gmail.com> 0.6.1-1
+- Added firstboot
+- Upstream released new version
+
+* Mon Jan 29 2007 Mike McGrath <imlinux@gmail.com> 0.6-1
+- Upstream released new version
+- Added new symlinks for smoltPrint and smoltSendProfile
+
 * Thu Jan 25 2007 Mike McGrath <imlinux@gmail.com> 0.5-4
 - Forgot Requires of dbus-python
 
