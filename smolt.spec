@@ -1,6 +1,6 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.6.2
+Version: 0.7
 Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
@@ -9,14 +9,11 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 # Note: This is a link to the gzip, you can't download it directly
 # This will get fixed as soon as hosted can create attachments directly
 
-Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.bz2
+Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
 Requires: dbus-python
-%ifnarch sparc sparc64
-Requires: /usr/bin/lsb_release
-%endif
 
 # If firstboot is installed
 #Requires: firstboot
@@ -59,11 +56,11 @@ separate package so firstboot isn't a requisite to use smolt.
 
 %install
 %{__rm} -rf %{buildroot}
-%{__install} -d -m 0755 hardware/ %{buildroot}/%{_datadir}/%{name}/server/
-%{__cp} -adv hardware/* %{buildroot}/%{_datadir}/%{name}/server/
+%{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
+%{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 
-%{__install} -d -m 0755 hw-client/ %{buildroot}/%{_datadir}/%{name}/client/
-%{__cp} -adv hw-client/* %{buildroot}/%{_datadir}/%{name}/client/
+%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} -adv client/* %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 %{__mkdir} -p %{buildroot}/%{_bindir}
@@ -71,10 +68,8 @@ separate package so firstboot isn't a requisite to use smolt.
 %{__cp} -adv firstboot/smolt.py %{buildroot}/%{_datadir}/firstboot/modules/
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
-ln -s %{_datadir}/%{name}/client/readProfile.py %{buildroot}/%{_bindir}/smoltPrint
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 %{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/sendProfile.py
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/readProfile.py
 
 %clean
 rm -rf %{buildroot}
@@ -97,13 +92,16 @@ fi
 
 %files server
 %defattr(-,root,root,-)
-%{_datadir}/%{name}/server
+%{_datadir}/%{name}/smoon
 
 %files firstboot
 %defattr(-,root,root,-)
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Wed Feb 07 2007 Mike McGrath <imlinux@gmail.com> 0.7-1
+- Upstream released new version
+
 * Tue Jan 31 2007 Mike McGrath <imlinux@gmail.com> 0.6.2-1
 - Upstream released new version (bug in firstboot)
 
