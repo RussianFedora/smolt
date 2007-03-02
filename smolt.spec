@@ -1,6 +1,6 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9
+Version: 0.9.1
 Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
@@ -70,7 +70,7 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/sendProfile.py
+%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*.py
 
 %clean
 rm -rf %{buildroot}
@@ -100,6 +100,9 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Fri Mar 01 2007 Mike McGrath <mmcgrath@redhat.com> 0.9-1
+- Upstream released new version, major smoon changes.
+
 * Mon Feb 19 2007 Mike McGrath <mmcgrath@redhat.com> 0.9-1
 - Upstream released new version
 
