@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.1
-Release: 2%{?dist}
+Version: 0.9.2
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -100,11 +100,11 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
-* Fri Mar 01 2007 Mike McGrath <mmcgrath@redhat.com> 0.9-2
+* Fri Mar 01 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.2-1
 - Fixed firstboot
 - Upstream released new version
 
-* Fri Mar 01 2007 Mike McGrath <mmcgrath@redhat.com> 0.9-1
+* Fri Mar 01 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.1-1
 - Upstream released new version, major smoon changes.
 
 * Mon Feb 19 2007 Mike McGrath <mmcgrath@redhat.com> 0.9-1
