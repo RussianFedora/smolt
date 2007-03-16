@@ -1,6 +1,6 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.2
+Version: 0.9.4
 Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
@@ -14,9 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
 Requires: dbus-python
-
-# If firstboot is installed
-#Requires: firstboot
+BuildRequires: gettext
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -59,18 +57,28 @@ separate package so firstboot isn't a requisite to use smolt.
 %{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 
-%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
-%{__cp} -adv client/* %{buildroot}/%{_datadir}/%{name}/client/
-
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
+%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
 %{__mkdir} -p %{buildroot}/%{_bindir}
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
-%{__cp} -adv firstboot/smolt.py %{buildroot}/%{_datadir}/firstboot/modules/
+%{__mkdir} -p %{buildroot}/%{_initrddir}
+%{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
+%{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
+%{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
+
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
+
+%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} -adv client/*.png %{buildroot}/%{_datadir}/%{name}/client/
 
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*.py
+ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
+
+%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
+%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
+%{__chmod} +x %{buildroot}/%{_initrddir}/smolt
 
 %clean
 rm -rf %{buildroot}
@@ -83,12 +91,16 @@ then
     /bin/chown root:root %{_sysconfdir}/sysconfig/hw-uuid
 fi
 
+#%find_lang %{name}
+
 %files
 %defattr(-,root,root,-)
 %doc README GPL doc/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/client
 %{_bindir}/%{name}*
+%{_sysconfdir}/cron.d/%{name}
+%{_initrddir}/%{name}
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
 
 %files server
@@ -100,6 +112,11 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Fri Mar 16 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.4-1
+- Upstream released new version
+- Major changes
+- Added initial i18n support (Probably doesn't work)
+
 * Fri Mar 01 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.2-1
 - Fixed firstboot
 - Upstream released new version
