@@ -1,6 +1,6 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.4
+Version: 0.9.6
 Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
@@ -51,6 +51,10 @@ separate package so firstboot isn't a requisite to use smolt.
 %setup -q
 
 %build
+cd client/
+make
+# Remove the po files
+find ./ -name smolt.po -exec rm {} \;
 
 %install
 %{__rm} -rf %{buildroot}
@@ -62,9 +66,11 @@ separate package so firstboot isn't a requisite to use smolt.
 %{__mkdir} -p %{buildroot}/%{_bindir}
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
 %{__mkdir} -p %{buildroot}/%{_initrddir}
+%{__mkdir} -p %{buildroot}/%{_datadir}/locale/
 %{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 %{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
+%{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
@@ -98,6 +104,7 @@ fi
 %doc README GPL doc/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/client
+%{_datadir}/locale/
 %{_bindir}/%{name}*
 %{_sysconfdir}/cron.d/%{name}
 %{_initrddir}/%{name}
@@ -112,6 +119,9 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Wed Apr 11 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.6-1
+- Upstream released new version.
+
 * Fri Mar 16 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.4-1
 - Upstream released new version
 - Major changes
