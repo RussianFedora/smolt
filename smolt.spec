@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -15,6 +15,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: dbus-python
 BuildRequires: gettext
+BuildRequires: /usr/bin/msgfmt.py
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -119,8 +120,9 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
-* Wed Apr 11 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.6-1
+* Wed Apr 11 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.6-2
 - Upstream released new version.
+- Much better support for languages on the client
 
 * Fri Mar 16 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.4-1
 - Upstream released new version
