@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -79,6 +79,9 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} -adv client/*.png %{buildroot}/%{_datadir}/%{name}/client/
 
+%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
+%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
+
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
@@ -105,6 +108,7 @@ fi
 %doc README GPL doc/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/client
+%{_datadir}/%{name}/doc
 %{_datadir}/locale/
 %{_bindir}/%{name}*
 %{_sysconfdir}/cron.d/%{name}
@@ -120,6 +124,9 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Fri Apr 13 2007 Jeffrey C. Ollie <jeff@ocjtech.us> - 0.9.6-3
+- Put a copy of the privacy policy where the client is expecting it.
+
 * Wed Apr 11 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.6-2
 - Upstream released new version.
 - Much better support for languages on the client
