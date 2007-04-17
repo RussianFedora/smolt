@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.6
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -16,6 +16,11 @@ BuildArch: noarch
 Requires: dbus-python
 BuildRequires: gettext
 BuildRequires: /usr/bin/msgfmt.py
+
+Requires(post): /sbin/chkconfig
+Requires(preun): /sbin/chkconfig
+Requires(preun): /sbin/service
+Requires(postun): /sbin/service
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -54,8 +59,6 @@ separate package so firstboot isn't a requisite to use smolt.
 %build
 cd client/
 make
-# Remove the po files
-find ./ -name smolt.po -exec rm {} \;
 
 %install
 %{__rm} -rf %{buildroot}
@@ -72,6 +75,7 @@ find ./ -name smolt.po -exec rm {} \;
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 %{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
 %{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
+find %{buildroot} -name \*.po\* -delete
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
@@ -90,10 +94,13 @@ ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
 %{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
 %{__chmod} +x %{buildroot}/%{_initrddir}/smolt
 
+%find_lang %{name}
+
 %clean
 rm -rf %{buildroot}
 
 %post
+/sbin/chkconfig --add smolt
 if ! [ -f %{_sysconfdir}/sysconfig/hw-uuid ]
 then
     /bin/cat /proc/sys/kernel/random/uuid > %{_sysconfdir}/sysconfig/hw-uuid
@@ -101,15 +108,18 @@ then
     /bin/chown root:root %{_sysconfdir}/sysconfig/hw-uuid
 fi
 
-#%find_lang %{name}
+%preun
+if [ $1 = 0 ]; then
+        /sbin/service smolt stop >/dev/null 2>&1
+        /sbin/chkconfig --del smolt
+fi
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README GPL doc/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/client
 %{_datadir}/%{name}/doc
-%{_datadir}/locale/
 %{_bindir}/%{name}*
 %{_sysconfdir}/cron.d/%{name}
 %{_initrddir}/%{name}
@@ -124,6 +134,10 @@ fi
 %{_datadir}/firstboot/modules/smolt.py*
 
 %changelog
+* Tue Apr 17 2007 Jeffrey C. Ollie <jeff@ocjtech.us> - 0.9.6-4
+- Add standard scriptlets in pre & post to handle init script - fixes #236776
+- Use the find_lang macro to find/mark translations.
+
 * Fri Apr 13 2007 Jeffrey C. Ollie <jeff@ocjtech.us> - 0.9.6-3
 - Put a copy of the privacy policy where the client is expecting it.
 
