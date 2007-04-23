@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.6
-Release: 4%{?dist}
+Version: 0.9.7.1
+Release: 3%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -16,6 +16,7 @@ BuildArch: noarch
 Requires: dbus-python
 BuildRequires: gettext
 BuildRequires: /usr/bin/msgfmt.py
+BuildRequires: desktop-file-utils
 
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
@@ -53,6 +54,15 @@ Requires: smolt = %{version}-%{release}
 This provides firstboot integration for smolt.  It has been broken into a
 separate package so firstboot isn't a requisite to use smolt.
 
+%package gui
+Summary: Fedora hardware profiler gui
+Group: Applications/Internet
+Requires: smolt = %{version}-%{release}
+
+%description gui
+Provides smolt's gui functionality.  Not included in the default package to
+ensure that deps are kept small.
+
 %prep
 %setup -q
 
@@ -75,13 +85,27 @@ make
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 %{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
 %{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
+
 find %{buildroot} -name \*.po\* -delete
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
 %{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
+%{__install} -d -m 0755 client/icons/ %{buildroot}/%{_datadir}/%{name}/client/icons/
 %{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
-%{__cp} -adv client/*.png %{buildroot}/%{_datadir}/%{name}/client/
+
+# Icons
+%{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/
+%{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/
+%{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/
+%{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/
+%{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/pixmaps/
+%{__mv} client/icons/smolt-icon-16.png %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/smolt.png
+%{__mv} client/icons/smolt-icon-22.png %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/smolt.png
+%{__mv} client/icons/smolt-icon-24.png %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/smolt.png
+%{__mv} client/icons/smolt-icon-32.png %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/smolt.png
+%{__cp} -adv client/icons/* %{buildroot}/%{_datadir}/%{name}/client/icons/
+%{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/pixmaps/smolt.png
 
 %{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
 %{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
@@ -93,6 +117,8 @@ ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
 %{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
 %{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
 %{__chmod} +x %{buildroot}/%{_initrddir}/smolt
+
+desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
 
 %find_lang %{name}
 
@@ -120,7 +146,8 @@ fi
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/client
 %{_datadir}/%{name}/doc
-%{_bindir}/%{name}*
+%{_bindir}/smoltSendProfile
+%{_bindir}/smoltDeleteProfile
 %{_sysconfdir}/cron.d/%{name}
 %{_initrddir}/%{name}
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
@@ -132,8 +159,18 @@ fi
 %files firstboot
 %defattr(-,root,root,-)
 %{_datadir}/firstboot/modules/smolt.py*
+%{_datadir}/firstboot/pixmaps/smolt.png
+
+%files gui
+%defattr(-,root,root,-)
+%{_datadir}/applications/fedora-smolt.desktop
+%{_datadir}/icons/hicolor/*x*/apps/smolt.png
+%{_bindir}/smoltGui
 
 %changelog
+* Sun Apr 22 2007 Mike McGrath <mmcgrath@redhat.com> - 0.9.7.1-3
+- Added smolt icons
+
 * Tue Apr 17 2007 Jeffrey C. Ollie <jeff@ocjtech.us> - 0.9.6-4
 - Add standard scriptlets in pre & post to handle init script - fixes #236776
 - Use the find_lang macro to find/mark translations.
