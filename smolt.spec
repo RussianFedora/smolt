@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.7.1
-Release: 4%{?dist}
+Version: 0.9.8.1
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -49,7 +49,6 @@ This package contains the server portion
 Summary: Fedora hardware profile firstboot
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
-Requires: firstboot
 
 %description firstboot
 This provides firstboot integration for smolt.  It has been broken into a
@@ -169,8 +168,8 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
-* Sun Apr 22 2007 Mike McGrath <mmcgrath@redhat.com> - 0.9.7.1-4
-- Added requires for firstboot on smolt-firstboot
+* Thu May 24 2007 Mike McGrath <mmcgrath@redhat.com> - 0.9.8.1
+- Upstream released new version
 
 * Sun Apr 22 2007 Mike McGrath <mmcgrath@redhat.com> - 0.9.7.1-3
 - Added smolt icons
