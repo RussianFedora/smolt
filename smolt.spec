@@ -1,6 +1,6 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.8.3
+Version: 0.9.8.4
 Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
@@ -15,7 +15,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: dbus-python
 BuildRequires: gettext
-BuildRequires: /usr/bin/msgfmt.py
 BuildRequires: desktop-file-utils
 
 Requires(post): /sbin/chkconfig
@@ -72,27 +71,31 @@ make
 
 %install
 %{__rm} -rf %{buildroot}
+cd client
+DESTDIR=%{buildroot} make install
+cd ..
 %{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
+%{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
-%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
-%{__mkdir} -p %{buildroot}/%{_bindir}
+#%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
+#%{__mkdir} -p %{buildroot}/%{_bindir}
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
 %{__mkdir} -p %{buildroot}/%{_initrddir}
-%{__mkdir} -p %{buildroot}/%{_datadir}/locale/
+#%{__mkdir} -p %{buildroot}/%{_datadir}/locale/
 %{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
-%{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
-%{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
+#%{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
+#%{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
 
-find %{buildroot} -name \*.po\* -delete
+#find %{buildroot} -name \*.po\* -delete
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
-%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
-%{__install} -d -m 0755 client/icons/ %{buildroot}/%{_datadir}/%{name}/client/icons/
-%{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
+#%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
+#%{__install} -d -m 0755 client/icons/ %{buildroot}/%{_datadir}/%{name}/client/icons/
+#%{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
 
 # Icons
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/
@@ -107,20 +110,25 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__cp} -adv client/icons/* %{buildroot}/%{_datadir}/%{name}/client/icons/
 %{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/pixmaps/smolt.png
 
-%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
-%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
+#%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
+#%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
 
+#%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
+#%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
+#%{__chmod} +x %{buildroot}/%{_initrddir}/smolt
+
+%{__rm} -f %{buildroot}/%{_bindir}/smoltSendProfile %{buildroot}/%{_bindir}/smoltDeleteProfile %{buildroot}/%{_bindir}/smoltGui
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
-
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
-%{__chmod} +x %{buildroot}/%{_initrddir}/smolt
+ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
-
 %find_lang %{name}
+
+# Cleanup from the Makefile (will be cleaned up when it is finalized)
+%{__rm} -f %{buildroot}/etc/init.d/smolt
+%{__rm} -f %{buildroot}/etc/smolt/hw-uuid
 
 %clean
 rm -rf %{buildroot}
@@ -148,6 +156,7 @@ fi
 %{_datadir}/%{name}/doc
 %{_bindir}/smoltSendProfile
 %{_bindir}/smoltDeleteProfile
+%{_sysconfdir}/%{name}/config.py
 %{_sysconfdir}/cron.d/%{name}
 %{_initrddir}/%{name}
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
@@ -168,6 +177,12 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4
+- Upstream released new version (major changes)
+- New config file
+- New Makefile
+- Added deps
+
 * Fri Jun 22 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.3
 - Upstream released new version
 
