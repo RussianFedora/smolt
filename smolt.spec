@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.8.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -129,6 +129,8 @@ desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applicatio
 # Cleanup from the Makefile (will be cleaned up when it is finalized)
 %{__rm} -f %{buildroot}/etc/init.d/smolt
 %{__rm} -f %{buildroot}/etc/smolt/hw-uuid
+%{__rm} -f %{buildroot}/etc/smolt/smolt.pyc
+%{__rm} -f %{buildroot}/etc/smolt/smolt.pyo
 
 %clean
 rm -rf %{buildroot}
@@ -177,7 +179,10 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
-* Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4
+* Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-2
+- Rebuild to clean up 'config.py' compilations
+
+* Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-1
 - Upstream released new version (major changes)
 - New config file
 - New Makefile
