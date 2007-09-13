@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.8.4
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -139,7 +139,7 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
-* Thu Sep 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-5
+* Thu Sep 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-6
 - Removed firstboot and server portions for EL-4
 
 * Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-4
