@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.8.3
-Release: 1%{?dist}
+Version: 0.9.8.4
+Release: 5%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -15,7 +15,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: dbus-python
 BuildRequires: gettext
-BuildRequires: /usr/bin/msgfmt.py
 BuildRequires: desktop-file-utils
 
 Requires(post): /sbin/chkconfig
@@ -30,29 +29,6 @@ turbogears server.  The sends are anonymous and should not contain any private
 information other than the physical hardware information and basic OS info.
 
 This package contains the client
-
-%package server
-Summary: Fedora hardware profiler server
-Group: Applications/Internet
-Requires: smolt = %{version}-%{release}
-Requires: TurboGears
-
-%description server
-The Fedora hardware profiler is a server-client system that does a hardware
-scan against a machine and sends the results to a public Fedora Project
-turbogears server.  The sends are anonymous and should not contain any private
-information other than the physical hardware information and basic OS info.
-
-This package contains the server portion
-
-%package firstboot
-Summary: Fedora hardware profile firstboot
-Group: Applications/Internet
-Requires: smolt = %{version}-%{release}
-
-%description firstboot
-This provides firstboot integration for smolt.  It has been broken into a
-separate package so firstboot isn't a requisite to use smolt.
 
 %package gui
 Summary: Fedora hardware profiler gui
@@ -72,55 +48,58 @@ make
 
 %install
 %{__rm} -rf %{buildroot}
-%{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
-%{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
+cd client
+DESTDIR=%{buildroot} make install
+cd ..
+%{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
-%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
-%{__mkdir} -p %{buildroot}/%{_bindir}
-%{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
+#%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
+#%{__mkdir} -p %{buildroot}/%{_bindir}
 %{__mkdir} -p %{buildroot}/%{_initrddir}
-%{__mkdir} -p %{buildroot}/%{_datadir}/locale/
-%{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
+#%{__mkdir} -p %{buildroot}/%{_datadir}/locale/
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
-%{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
-%{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
+#%{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
+#%{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
 
-find %{buildroot} -name \*.po\* -delete
+#find %{buildroot} -name \*.po\* -delete
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
-%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
-%{__install} -d -m 0755 client/icons/ %{buildroot}/%{_datadir}/%{name}/client/icons/
-%{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
+#%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
+#%{__install} -d -m 0755 client/icons/ %{buildroot}/%{_datadir}/%{name}/client/icons/
+#%{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
 
 # Icons
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/
-%{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/pixmaps/
 %{__mv} client/icons/smolt-icon-16.png %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/smolt.png
 %{__mv} client/icons/smolt-icon-22.png %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/smolt.png
 %{__mv} client/icons/smolt-icon-24.png %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/smolt.png
 %{__mv} client/icons/smolt-icon-32.png %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/smolt.png
 %{__cp} -adv client/icons/* %{buildroot}/%{_datadir}/%{name}/client/icons/
-%{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/pixmaps/smolt.png
 
-%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
-%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
+#%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
+#%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
 
+#%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
+#%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
+#%{__chmod} +x %{buildroot}/%{_initrddir}/smolt
+
+%{__rm} -f %{buildroot}/%{_bindir}/smoltSendProfile %{buildroot}/%{_bindir}/smoltDeleteProfile %{buildroot}/%{_bindir}/smoltGui
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
-
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
-%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
-%{__chmod} +x %{buildroot}/%{_initrddir}/smolt
+ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
-
 %find_lang %{name}
+
+# Cleanup from the Makefile (will be cleaned up when it is finalized)
+%{__rm} -f %{buildroot}/etc/init.d/smolt
+%{__rm} -f %{buildroot}/etc/smolt/hw-uuid
 
 %clean
 rm -rf %{buildroot}
@@ -148,18 +127,10 @@ fi
 %{_datadir}/%{name}/doc
 %{_bindir}/smoltSendProfile
 %{_bindir}/smoltDeleteProfile
+%{_sysconfdir}/%{name}/config.*
 %{_sysconfdir}/cron.d/%{name}
 %{_initrddir}/%{name}
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
-
-%files server
-%defattr(-,root,root,-)
-%{_datadir}/%{name}/smoon
-
-%files firstboot
-%defattr(-,root,root,-)
-%{_datadir}/firstboot/modules/smolt.py*
-%{_datadir}/firstboot/pixmaps/smolt.png
 
 %files gui
 %defattr(-,root,root,-)
@@ -168,6 +139,18 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Sep 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-5
+- Removed firstboot and server portions for EL-4
+
+* Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-4
+- Rebuild to clean up 'config.py' compilations
+
+* Mon Aug 13 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-1
+- Upstream released new version (major changes)
+- New config file
+- New Makefile
+- Added deps
+
 * Fri Jun 22 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.3
 - Upstream released new version
 
