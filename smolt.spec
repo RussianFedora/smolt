@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.8.4
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -12,6 +12,7 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.gz
 Patch0: firstboot.patch
 Patch1: languages.patch
+Patch2: selinux.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -68,6 +69,7 @@ ensure that deps are kept small.
 %setup -q
 %patch0 -p0
 %patch1 -p0
+%patch2 -p0
 
 %build
 cd client/
@@ -181,6 +183,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Fri Sep 28 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-7
+- Fixed Selinux
+
 * Thu Sep 27 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.8.4-6
 - Added translations
 
