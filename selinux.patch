@@ -1,46 +1,46 @@
---- /tmp/smolt.py	2007-09-28 10:47:24.000000000 -0500
-+++ client/smolt.py	2007-08-13 15:46:43.000000000 -0500
-@@ -196,24 +196,18 @@
+--- /tmp/smolt.py	2007-09-28 11:17:42.000000000 -0500
++++ client/smolt.py	2007-09-28 10:46:22.000000000 -0500
+@@ -196,18 +196,24 @@
              self.formfactor = hostInfo['system.formfactor']
          except:
              self.formfactor = 'Unknown'
--
++
          try:
--            import selinux
--            try:
--                if selinux.is_selinux_enabled() == 1:
--                    self.selinux_enabled = True
--                else:
--                    self.selinux_enabled = False
--            except:
--                self.selinux_enabled = False
-+            retcode = os.system('/usr/sbin/selinuxenabled')
-+            self.selinux_enabled =  os.WIFEXITED(recode) and os.WEXITCODE(retcode) == 0
-+        except:
-+            self.selinux_enabled = False
-+        if self.selinux_enabled:
+-            retcode = os.system('/usr/sbin/selinuxenabled')
+-            self.selinux_enabled =  os.WIFEXITED(recode) and os.WEXITCODE(retcode) == 0
+-        except:
+-            self.selinux_enabled = False
+-        if self.selinux_enabled:
++            import selinux
              try:
--                self.selinux_enforce = selinux.selinux_getpolicytype()[1]
-+                self.selinux_enforce = os.popen('LANG=C /usr/sbin/getenforce').read().strip()
+-                self.selinux_enforce = os.popen('LANG=C /usr/sbin/getenforce').read().strip()
++                if selinux.is_selinux_enabled() == 1:
++                    self.selinux_enabled = True
++                else:
++                    self.selinux_enabled = False
              except:
--                self.selinux_enforce = "Unknown"
--        except ImportError:
--            self.selinux_enabled = "Not installed"
--            self.selinux_enforce = "Not Installed"
--    
-+                self.selinux_enforce = 'Disabled'
-+        else:
-+            self.selinux_enforce = 'Disabled'
+-                self.selinux_enforce = 'Disabled'
+-        else:
+-            self.selinux_enforce = 'Disabled'
++                self.selinux_enabled = False
++            try:
++                self.selinux_enforce = selinux.selinux_getpolicytype()[1]
++            except:
++                self.selinux_enforce = "Unknown"
++        except ImportError:
++            self.selinux_enabled = "Not installed"
++            self.selinux_enforce = "Not Installed"
++    
  
  def ignoreDevice(device):
      ignore = 1
-@@ -273,8 +267,8 @@
+@@ -267,8 +273,8 @@
          except:
              raise SystemBusError, _('Could not bind to dbus.  Is dbus running?')
          
-+        mgr = self.dbus_get_interface(systemBus, 'org.freedesktop.Hal', '/org/freedesktop/Hal/Manager', 'org.freedesktop.Hal.Manager')
+-        mgr = self.dbus_get_interface(systemBus, 'org.freedesktop.Hal', '/org/freedesktop/Hal/Manager', 'org.freedesktop.Hal.Manager')
          try:
--            mgr = self.dbus_get_interface(systemBus, 'org.freedesktop.Hal', '/org/freedesktop/Hal/Manager', 'org.freedesktop.Hal.Manager')
++            mgr = self.dbus_get_interface(systemBus, 'org.freedesktop.Hal', '/org/freedesktop/Hal/Manager', 'org.freedesktop.Hal.Manager')
              all_dev_lst = mgr.GetAllDevices()
          except:
              raise SystemBusError, _('Could not connect to hal, is it running?'), _('Run "service haldaemon start" as root')
