@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 0.9.9.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -157,7 +157,7 @@ fi
 %{_datadir}/%{name}/doc
 %{_bindir}/smoltSendProfile
 %{_bindir}/smoltDeleteProfile
-%config(noreplace) /%{_sysconfdir}/%{name}/config.py
+%config(noreplace) /%{_sysconfdir}/%{name}/config*
 %{_sysconfdir}/cron.d/%{name}
 %{_initrddir}/%{name}
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
@@ -178,7 +178,7 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
-* Tue Oct 23 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.9.1-3
+* Tue Oct 23 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.9.1-4
 - Upstream released new version
 
 * Thu Oct 18 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.9-2
