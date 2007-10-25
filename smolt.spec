@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 0.9.9.1
-Release: 4%{?dist}
+Version: 0.9.9.2
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -178,6 +178,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Tue Oct 25 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.9.2-1
+- Upstream released new version
+
 * Tue Oct 23 2007 Mike McGrath <mmcgrath@redhat.com> 0.9.9.1-4
 - Upstream released new version
 
