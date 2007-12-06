@@ -13,7 +13,7 @@ Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStar
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python
+Requires: dbus-python, python-crypto
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
