@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -13,7 +13,7 @@ Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStar
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python
+Requires: dbus-python, python-crypto
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -77,6 +77,7 @@ cd ..
 %{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 #%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
@@ -178,6 +179,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Nov 22 2007 Mike McGrath <mmcgrath@redhat.com> 1.0-2
+- Installed scanner - #395901
+
 * Tue Nov 20 2007 Mike McGrath <mmcgrath@redhat.com> 1.0-1
 - Upstream released new version
 
