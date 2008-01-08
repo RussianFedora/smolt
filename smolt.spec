@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -10,6 +10,7 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 # This will get fixed as soon as hosted can create attachments directly
 
 Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.gz
+Source1: smoltFirstBoot.py
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -64,6 +65,7 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
+%{__cp} %{SOURCE1} client/
 
 %build
 cd client/
@@ -104,12 +106,13 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/pixmaps/
+%{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/themes/default/
 %{__mv} client/icons/smolt-icon-16.png %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/smolt.png
 %{__mv} client/icons/smolt-icon-22.png %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/smolt.png
 %{__mv} client/icons/smolt-icon-24.png %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/smolt.png
 %{__mv} client/icons/smolt-icon-32.png %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/smolt.png
 %{__cp} -adv client/icons/* %{buildroot}/%{_datadir}/%{name}/client/icons/
-%{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/pixmaps/smolt.png
+%{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/themes/default/smolt.png
 
 #%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
 #%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
@@ -170,7 +173,7 @@ fi
 %files firstboot
 %defattr(-,root,root,-)
 %{_datadir}/firstboot/modules/smolt.py*
-%{_datadir}/firstboot/pixmaps/smolt.png
+%{_datadir}/firstboot/themes/default/smolt.png
 
 %files gui
 %defattr(-,root,root,-)
@@ -179,6 +182,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Jan 08 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-4
+- Fixed firstboot
+
 * Thu Jan 08 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-3
 - Added python-urlgrabber as a requires - 427969
 
