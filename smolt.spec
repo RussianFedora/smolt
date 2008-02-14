@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 1.0
-Release: 4%{?dist}
+Version: 1.1
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -10,11 +10,10 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 # This will get fixed as soon as hosted can create attachments directly
 
 Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.gz
-Source1: smoltFirstBoot.py
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python, python-crypto, python-urlgrabber
+Requires: dbus-python, python-crypto, python-urlgrabber, gawk
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -35,7 +34,7 @@ This package contains the client
 Summary: Fedora hardware profiler server
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
-Requires: TurboGears
+Requires: TurboGears mx
 
 %description server
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -65,7 +64,6 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
-%{__cp} %{SOURCE1} client/
 
 %build
 cd client/
@@ -80,6 +78,7 @@ cd ..
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/fs_util.py %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 #%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
@@ -139,12 +138,11 @@ rm -rf %{buildroot}
 
 %post
 /sbin/chkconfig --add smolt
-if ! [ -f %{_sysconfdir}/sysconfig/hw-uuid ]
-then
-    /bin/cat /proc/sys/kernel/random/uuid > %{_sysconfdir}/sysconfig/hw-uuid
-    /bin/chmod 0644 %{_sysconfdir}/sysconfig/hw-uuid
-    /bin/chown root:root %{_sysconfdir}/sysconfig/hw-uuid
-fi
+
+#Randomize checkin times.
+TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
+/bin/awk '{ srand(); if($2 == 1 && $3 == 1) print $1,int((rand() * 100) % 22 + 1),int((rand() * 100) % 27 + 1),substr($0,index($0,$4)); else print $0}' /etc/cron.d/smolt > $TMPFILE
+/bin/mv $TMPFILE /etc/cron.d/smolt
 
 %preun
 if [ $1 = 0 ]; then
@@ -182,6 +180,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Fri Feb 01 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-5
+- Added a req for mx on smoon
+
 * Thu Jan 08 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-4
 - Fixed firstboot
 
