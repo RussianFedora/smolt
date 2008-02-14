@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 1.0
-Release: 2%{?dist}
+Version: 1.1
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -13,7 +13,7 @@ Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStar
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python, python-crypto
+Requires: dbus-python, python-crypto, python-urlgrabber, gawk
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -34,7 +34,7 @@ This package contains the client
 Summary: Fedora hardware profiler server
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
-Requires: TurboGears
+Requires: TurboGears mx
 
 %description server
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -78,6 +78,7 @@ cd ..
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/fs_util.py %{buildroot}/%{_datadir}/%{name}/client/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 #%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
@@ -104,12 +105,13 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/pixmaps/
+%{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/themes/default/
 %{__mv} client/icons/smolt-icon-16.png %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/smolt.png
 %{__mv} client/icons/smolt-icon-22.png %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/smolt.png
 %{__mv} client/icons/smolt-icon-24.png %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/smolt.png
 %{__mv} client/icons/smolt-icon-32.png %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/smolt.png
 %{__cp} -adv client/icons/* %{buildroot}/%{_datadir}/%{name}/client/icons/
-%{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/pixmaps/smolt.png
+%{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/themes/default/smolt.png
 
 #%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
 #%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
@@ -136,12 +138,11 @@ rm -rf %{buildroot}
 
 %post
 /sbin/chkconfig --add smolt
-if ! [ -f %{_sysconfdir}/sysconfig/hw-uuid ]
-then
-    /bin/cat /proc/sys/kernel/random/uuid > %{_sysconfdir}/sysconfig/hw-uuid
-    /bin/chmod 0644 %{_sysconfdir}/sysconfig/hw-uuid
-    /bin/chown root:root %{_sysconfdir}/sysconfig/hw-uuid
-fi
+
+#Randomize checkin times.
+TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
+/bin/awk '{ srand(); if($2 == 1 && $3 == 1) print $1,int((rand() * 100) % 22 + 1),int((rand() * 100) % 27 + 1),substr($0,index($0,$4)); else print $0}' /etc/cron.d/smolt > $TMPFILE
+/bin/mv $TMPFILE /etc/cron.d/smolt
 
 %preun
 if [ $1 = 0 ]; then
@@ -170,7 +171,7 @@ fi
 %files firstboot
 %defattr(-,root,root,-)
 %{_datadir}/firstboot/modules/smolt.py*
-%{_datadir}/firstboot/pixmaps/smolt.png
+%{_datadir}/firstboot/themes/default/smolt.png
 
 %files gui
 %defattr(-,root,root,-)
@@ -179,6 +180,15 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Fri Feb 01 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-5
+- Added a req for mx on smoon
+
+* Thu Jan 08 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-4
+- Fixed firstboot
+
+* Thu Jan 08 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-3
+- Added python-urlgrabber as a requires - 427969
+
 * Thu Nov 22 2007 Mike McGrath <mmcgrath@redhat.com> 1.0-2
 - Installed scanner - #395901
 
