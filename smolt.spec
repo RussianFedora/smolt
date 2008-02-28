@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1
-Release: 1%{?dist}
+Release: 3%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -17,6 +17,8 @@ Requires: dbus-python, python-crypto, python-urlgrabber, gawk
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
+Requires(pre): %{_sbindir}/groupadd
+Requires(pre): %{_sbindir}/useradd
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
 Requires(preun): /sbin/service
@@ -136,13 +138,19 @@ desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applicatio
 %clean
 rm -rf %{buildroot}
 
+%pre
+%{_sbindir}/groupadd -r %{name} &>/dev/null || :
+%{_sbindir}/useradd  -r -s /sbin/nologin -d %{_datadir}/%{name} -M \
+                               -c 'Smolt' -g %{name} %{name} &>/dev/null || :
+
 %post
 /sbin/chkconfig --add smolt
 
 #Randomize checkin times.
 TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
 /bin/awk '{ srand(); if($2 == 1 && $3 == 1) print $1,int((rand() * 100) % 22 + 1),int((rand() * 100) % 27 + 1),substr($0,index($0,$4)); else print $0}' /etc/cron.d/smolt > $TMPFILE
-/bin/mv $TMPFILE /etc/cron.d/smolt
+/bin/cp $TMPFILE /etc/cron.d/smolt
+/bin/rm -f $TMPFILE
 
 %preun
 if [ $1 = 0 ]; then
@@ -180,6 +188,13 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Feb 27 2008 Jeffrey C. Ollie <jeff@ocjtech.us> - 1.1-3
+- Copy instead of move cron file so that selinux contexts are set
+  properly. (BZ#435050)
+
+* Wed Feb 27 2008 Jeffrey C. Ollie <jeff@ocjtech.us> - 1.1-2
+- Create smolt user. (BZ#435136)
+
 * Fri Feb 01 2008 Mike McGrath <mmcgrath@redhat.com> 1.0-5
 - Added a req for mx on smoon
 
