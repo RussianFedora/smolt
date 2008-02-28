@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -149,7 +149,8 @@ rm -rf %{buildroot}
 #Randomize checkin times.
 TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
 /bin/awk '{ srand(); if($2 == 1 && $3 == 1) print $1,int((rand() * 100) % 22 + 1),int((rand() * 100) % 27 + 1),substr($0,index($0,$4)); else print $0}' /etc/cron.d/smolt > $TMPFILE
-/bin/mv $TMPFILE /etc/cron.d/smolt
+/bin/cp $TMPFILE /etc/cron.d/smolt
+/bin/rm -f $TMPFILE
 
 %preun
 if [ $1 = 0 ]; then
@@ -187,6 +188,10 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Feb 27 2008 Jeffrey C. Ollie <jeff@ocjtech.us> - 1.1-3
+- Copy instead of move cron file so that selinux contexts are set
+  properly. (BZ#435050)
+
 * Wed Feb 27 2008 Jeffrey C. Ollie <jeff@ocjtech.us> - 1.1-2
 - Create smolt user. (BZ#435136)
 
