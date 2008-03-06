@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 1.1
-Release: 3%{?dist}
+Version: 1.1.1
+Release: 1%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -9,11 +9,11 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 # Note: This is a link to the gzip, you can't download it directly
 # This will get fixed as soon as hosted can create attachments directly
 
-Source: https://hosted.fedoraproject.org/projects/smolt/attachment/wiki/WikiStart/%{name}-%{version}.tar.gz
+Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python, python-crypto, python-urlgrabber, gawk
+Requires: dbus-python, python-crypto, python-urlgrabber, gawk, python-genshi, python-paste
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -77,29 +77,20 @@ cd client
 DESTDIR=%{buildroot} make install
 cd ..
 %{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
+%{__mkdir} -p %{buildroot}/%{_mandir}/man1/
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/fs_util.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/man/* %{buildroot}/%{_mandir}/man1/
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
-#%{__mkdir} -p %{buildroot}/%{_sysconfdir}/cron.d/
-#%{__mkdir} -p %{buildroot}/%{_bindir}
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
 %{__mkdir} -p %{buildroot}/%{_initrddir}
-#%{__mkdir} -p %{buildroot}/%{_datadir}/locale/
 %{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
-#%{__mv} client/smolt.cron.monthly %{buildroot}/%{_sysconfdir}/cron.d/smolt
-#%{__cp} -adv client/po/* %{buildroot}/%{_datadir}/locale/
-
-#find %{buildroot} -name \*.po\* -delete
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
-
-#%{__install} -d -m 0755 client/ %{buildroot}/%{_datadir}/%{name}/client/
-#%{__install} -d -m 0755 client/icons/ %{buildroot}/%{_datadir}/%{name}/client/icons/
-#%{__cp} -adv client/*.py %{buildroot}/%{_datadir}/%{name}/client/
 
 # Icons
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/
@@ -114,13 +105,6 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__mv} client/icons/smolt-icon-32.png %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/smolt.png
 %{__cp} -adv client/icons/* %{buildroot}/%{_datadir}/%{name}/client/icons/
 %{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/themes/default/smolt.png
-
-#%{__mkdir} -p %{buildroot}/%{_datadir}/%{name}/doc
-#%{__install} -p -m 0644 doc/PrivacyPolicy %{buildroot}/%{_datadir}/%{name}/doc
-
-#%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/*Profile.py
-#%{__chmod} +x %{buildroot}/%{_datadir}/%{name}/client/smoltGui.py
-#%{__chmod} +x %{buildroot}/%{_initrddir}/smolt
 
 %{__rm} -f %{buildroot}/%{_bindir}/smoltSendProfile %{buildroot}/%{_bindir}/smoltDeleteProfile %{buildroot}/%{_bindir}/smoltGui
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
@@ -169,6 +153,7 @@ fi
 %{_bindir}/smoltDeleteProfile
 %config(noreplace) /%{_sysconfdir}/%{name}/config*
 %{_sysconfdir}/cron.d/%{name}
+%{_mandir}/man1/*gz
 %{_initrddir}/%{name}
 %ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
 
@@ -188,6 +173,11 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Mar 05 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1-1
+- Upstream released new version
+- Manfiles added
+- Source location updated
+
 * Wed Feb 27 2008 Jeffrey C. Ollie <jeff@ocjtech.us> - 1.1-3
 - Copy instead of move cron file so that selinux contexts are set
   properly. (BZ#435050)
