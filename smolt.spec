@@ -175,7 +175,7 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
-* Sat Mar 08 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-1
+* Sat Mar 08 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-2
 - Fix firstboot for 437708, 437765
 
 * Sat Mar 08 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-1
