@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1.1.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -10,6 +10,7 @@ URL: http://hosted.fedoraproject.org/projects/smolt
 # This will get fixed as soon as hosted can create attachments directly
 
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
+Source1: smolt.py
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -87,7 +88,8 @@ cd ..
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
 %{__mkdir} -p %{buildroot}/%{_initrddir}
-%{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
+#%{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
+%{__mv} %{SOURCE0} %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
@@ -173,6 +175,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Sat Mar 08 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-1
+- Fix firstboot for 437708, 437765
+
 * Sat Mar 08 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-1
 - Upstream released new version
 
