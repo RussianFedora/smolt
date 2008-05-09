@@ -13,7 +13,7 @@ Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python, python-crypto, python-urlgrabber, gawk, python-genshi, python-paste
+Requires: dbus-python, python-urlgrabber, gawk, python-paste
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -36,6 +36,8 @@ This package contains the client
 Summary: Fedora hardware profiler server
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
+Requires: python-genshi
+Requires: python-crypto
 Requires: TurboGears mx
 
 %description server
@@ -49,7 +51,7 @@ This package contains the server portion
 %package firstboot
 Summary: Fedora hardware profile firstboot
 Group: Applications/Internet
-Requires: smolt = %{version}-%{release}
+Requires: smolt = %{version}-%{release}, python-turboflot
 
 %description firstboot
 This provides firstboot integration for smolt.  It has been broken into a
