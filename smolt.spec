@@ -1,14 +1,10 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1.1.1
-Release: 4%{?dist}
-License: GPL
+Release: 5%{?dist}
+License: GPLv2+
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
-
-# Note: This is a link to the gzip, you can't download it directly
-# This will get fixed as soon as hosted can create attachments directly
-
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -175,6 +171,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Sep  4 2008 Tom "spot" Callaway <tcallawa@redhat.com> 1.1.1.1-5
+- fix license tag
+
 * Thu Apr 03 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-4
 - One revert for rawhide
 
