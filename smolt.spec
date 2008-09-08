@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1.1.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -35,6 +35,7 @@ Requires: smolt = %{version}-%{release}
 Requires: python-genshi
 Requires: python-crypto
 Requires: TurboGears mx
+Requires: python-turboflot
 
 %description server
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -47,7 +48,7 @@ This package contains the server portion
 %package firstboot
 Summary: Fedora hardware profile firstboot
 Group: Applications/Internet
-Requires: smolt = %{version}-%{release}, python-turboflot
+Requires: smolt = %{version}-%{release}
 
 %description firstboot
 This provides firstboot integration for smolt.  It has been broken into a
@@ -171,6 +172,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Sun Sep  7 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-6
+- Added turboflot to server, removed from firstboot
+
 * Thu Sep  4 2008 Tom "spot" Callaway <tcallawa@redhat.com> 1.1.1.1-5
 - fix license tag
 
