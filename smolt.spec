@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1.1.1
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
@@ -109,6 +109,8 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
+
+%{_mv} %{buildroot}/%{_sysconfdir}/%{name}/config.py[oc] %{buildroot}/%{_datadir}/%{name}/client/
 ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
@@ -172,6 +174,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Oct 1 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-7
+- Fix for 439496
+
 * Sun Sep  7 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-6
 - Added turboflot to server, removed from firstboot
 
