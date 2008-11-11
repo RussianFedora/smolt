@@ -1,20 +1,16 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1.1.1
-Release: 3%{?dist}
-License: GPL
+Release: 8%{?dist}
+License: GPLv2+
 Group: Applications/Internet
 URL: http://hosted.fedoraproject.org/projects/smolt
-
-# Note: This is a link to the gzip, you can't download it directly
-# This will get fixed as soon as hosted can create attachments directly
-
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
-Source1: smolt.py
+Patch0: scan.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python, python-crypto, python-urlgrabber, gawk, python-genshi, python-paste
+Requires: dbus-python, python-urlgrabber, gawk, python-paste
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -37,7 +33,10 @@ This package contains the client
 Summary: Fedora hardware profiler server
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
+Requires: python-genshi
+Requires: python-crypto
 Requires: TurboGears mx
+Requires: python-turboflot
 
 %description server
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -67,6 +66,7 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
 cd client/
@@ -88,8 +88,7 @@ cd ..
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
 %{__mkdir} -p %{buildroot}/%{_initrddir}
-#%{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
-%{__mv} %{SOURCE1} %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
+%{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
@@ -112,6 +111,7 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
+
 ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
@@ -150,6 +150,8 @@ fi
 %dir %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}/
 %{_datadir}/%{name}/client
+%ghost %{_datadir}/%{name}/client/scan.pyc
+%ghost %{_datadir}/%{name}/client/scan.pyo
 %{_datadir}/%{name}/doc
 %{_bindir}/smoltSendProfile
 %{_bindir}/smoltDeleteProfile
@@ -175,6 +177,21 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Tue Nov 11 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-8
+- Added patch for fixed scanner
+
+* Wed Oct 1 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-7
+- Fix for 439496
+
+* Sun Sep  7 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-6
+- Added turboflot to server, removed from firstboot
+
+* Thu Sep  4 2008 Tom "spot" Callaway <tcallawa@redhat.com> 1.1.1.1-5
+- fix license tag
+
+* Thu Apr 03 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-4
+- One revert for rawhide
+
 * Sat Mar 08 2008 Mike McGrath <mmcgrath@redhat.com> - 1.1.1.1-3
 - Fixing firstboot again for 437708, 437765
 
