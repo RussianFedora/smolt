@@ -1,10 +1,10 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.1.1.1
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 Group: Applications/Internet
-URL: http://hosted.fedoraproject.org/projects/smolt
+URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 Patch0: scan.patch
 Patch1: smolt.py.patch
@@ -179,6 +179,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Fri Nov 21 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-10
+- Fix for bug 472101
+
 * Wed Nov 12 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-9
 - Fix for bug 470829
 
