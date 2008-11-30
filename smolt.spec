@@ -1,13 +1,11 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 1.1.1.1
-Release: 10%{?dist}
+Version: 1.2
+Release: 1%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
-Patch0: scan.patch
-Patch1: smolt.py.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -67,8 +65,6 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
-%patch0 -p0
-%patch1 -p0
 
 %build
 cd client/
@@ -179,6 +175,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Sun Nov 30 2008 Mike McGrath <mmcgrath@redhat.com> 1.2-1
+- Upstream released new version
+
 * Fri Nov 21 2008 Mike McGrath <mmcgrath@redhat.com> 1.1.1.1-10
 - Fix for bug 472101
 
