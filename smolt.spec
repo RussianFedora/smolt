@@ -1,11 +1,13 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
+Patch0: smolt-1.2-install.patch
+Patch1: smolt-1.2-python24.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -65,6 +67,8 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
+%patch0 -p1 -b .install
+%patch1 -p1 -b .python24
 
 %build
 cd client/
@@ -175,6 +179,10 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Dec 3 2008 Lubomir Rintel <lkundrak@v3.sk> 1.2-2
+- Add missing file to client
+- Fix run with python 2.4 in RHEL-5
+
 * Sun Nov 30 2008 Mike McGrath <mmcgrath@redhat.com> 1.2-1
 - Upstream released new version
 

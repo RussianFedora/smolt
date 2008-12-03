@@ -1,0 +1,36 @@
+From 003aebbc5a3c0076ca2a2967defab911493c7781 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 3 Dec 2008 14:05:38 +0100
+Subject: [PATCH] Fix installation
+
+Add os_detect.py, which is vital for the client, and fix the file
+permissions.
+---
+ client/Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/client/Makefile b/client/Makefile
+index 1161bb5..d4516d4 100644
+--- a/client/Makefile
++++ b/client/Makefile
+@@ -2,7 +2,7 @@ PO_FILES=$(wildcard po/*.po)
+ MO_FILES=$(patsubst %.po,%.mo,$(PO_FILES))
+ PY_FILES=fs_util.py deleteProfile.py haldump.py __init__.py sendProfile.py smoltGui.py smolt.py software.py smoltFirstBoot.py gui.py privacypolicy.py scan.py
+ DIRED_MO_FILES=$(patsubst po/%.mo,mo/%/LC_MESSAGES/$(NAME).mo,$(MO_FILES))
+-CLIENT_FILES=fs_util.py deleteProfile.py gui.py haldump.py i18n.py privacypolicy.py sendProfile.py smolt.py smoltGui.py software.py scan.py
++CLIENT_FILES=fs_util.py deleteProfile.py gui.py haldump.py i18n.py privacypolicy.py sendProfile.py smolt.py smoltGui.py software.py scan.py os_detect.py
+ 
+ 
+ NAME=smolt
+@@ -40,7 +40,7 @@ install-main: move-mo
+ 	
+ 	install -d -m 0755 ./ $(DATADIR)/$(NAME)/client/
+ 	install -d -m 0755 icons/ $(DATADIR)/$(NAME)/client/icons/
+-	cp -adv $(CLIENT_FILES) $(DATADIR)/$(NAME)/client/
++	install -p -m 0644 $(CLIENT_FILES) $(DATADIR)/$(NAME)/client/
+ 	
+ 	
+ 	mkdir -p $(DATADIR)/icons/hicolor/16x16/apps/
+-- 
+1.5.5.1
+

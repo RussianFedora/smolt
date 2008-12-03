@@ -1,0 +1,36 @@
+From 250748e0b7a2f1ad96e2a828673b52002549908d Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 3 Dec 2008 14:04:56 +0100
+Subject: [PATCH] Fix profile submit with Python 2.4
+
+urlparse() doesn't provide both hostname and the convenience
+attributes at all. No big deal -- netloc is obviously sufficient here.
+---
+ client/smolt.py |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/client/smolt.py b/client/smolt.py
+index 823f107..fd9c41d 100644
+--- a/client/smolt.py
++++ b/client/smolt.py
+@@ -432,7 +432,7 @@ class Hardware:
+ 
+     def write_pub_uuid(self,smoonURL,pub_uuid,pub_uuid_file):
+         smoonURLparsed=urlparse(smoonURL)
+-        pub_uuid_file += ("-"+smoonURLparsed.hostname)
++        pub_uuid_file += ("-"+smoonURLparsed[1])
+         try:
+             file(pub_uuid_file, 'w').write(pub_uuid)
+         except Exception, e:
+@@ -442,7 +442,7 @@ class Hardware:
+ 
+     def write_admin_token(self,smoonURL,admin,admin_token_file):
+         smoonURLparsed=urlparse(smoonURL)
+-        admin_token_file += ("-"+smoonURLparsed.hostname)
++        admin_token_file += ("-"+smoonURLparsed[1])
+         try:
+             file(admin_token_file, 'w').write(admin)
+         except Exception, e:
+-- 
+1.5.5.1
+
