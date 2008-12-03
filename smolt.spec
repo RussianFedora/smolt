@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -11,7 +11,7 @@ Patch1: smolt-1.2-python24.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-Requires: dbus-python, python-urlgrabber, gawk, python-paste
+Requires: dbus-python, python-urlgrabber, gawk, python-paste, python-ctypes
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -179,6 +179,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+- Wed Dec 3 2008 Mike McGrath <mmcgrath@redhat.com> 1.2-3
+- Added python-ctypes require
+
 * Wed Dec 3 2008 Lubomir Rintel <lkundrak@v3.sk> 1.2-2
 - Add missing file to client
 - Fix run with python 2.4 in RHEL-5
