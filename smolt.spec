@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -80,6 +80,7 @@ cd ..
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/os_detect.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/fs_util.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/man/* %{buildroot}/%{_mandir}/man1/
 
@@ -175,6 +176,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Jan 21 2009 Mike McGrath <mmcgrath@redhat.com> - 1.2-3
+- Added os_detect.py as it is now required.
+
 * Mon Dec 01 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.2-2
 - Rebuild for Python 2.6
 
