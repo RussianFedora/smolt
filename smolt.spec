@@ -1,4 +1,5 @@
 Name: smolt
+
 Summary: Fedora hardware profiler
 Version: 1.2
 Release: 3%{?dist}
