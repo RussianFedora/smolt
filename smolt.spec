@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -177,6 +177,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Wed Jan 21 2009 Mike McGrath <mmcgrath@redhat.com> - 1.2-3
 - Added os_detect.py as it is now required.
 
