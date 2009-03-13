@@ -1,16 +1,15 @@
 Name: smolt
-
 Summary: Fedora hardware profiler
 Version: 1.2
-Release: 4%{?dist}
+Release: 4.1%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildArch: noarch
 Requires: dbus-python, python-urlgrabber, gawk, python-paste
+BuildArch: noarch
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
 
@@ -88,6 +87,7 @@ cd ..
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
 %{__mkdir} -p %{buildroot}/%{_initrddir}
+
 %{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
 %{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 
@@ -98,8 +98,10 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/icons/hicolor/32x32/apps/
+
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/pixmaps/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/themes/default/
+
 %{__mv} client/icons/smolt-icon-16.png %{buildroot}/%{_datadir}/icons/hicolor/16x16/apps/smolt.png
 %{__mv} client/icons/smolt-icon-22.png %{buildroot}/%{_datadir}/icons/hicolor/22x22/apps/smolt.png
 %{__mv} client/icons/smolt-icon-24.png %{buildroot}/%{_datadir}/icons/hicolor/24x24/apps/smolt.png
@@ -131,6 +133,7 @@ rm -rf %{buildroot}
 
 %post
 /sbin/chkconfig --add smolt
+echo 'This is a fake attack.  If you see it please email me at mmcgrath@redhat.com and tell me' >> /dev/null
 
 #Randomize checkin times.
 TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
@@ -177,6 +180,10 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Fri Mar 13 2009 Mike McGrath <mmcgrath@redhat.com> - 1.2-4.1
+- Fixed some formatting in the spec file
+- Added note to %post
+
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
