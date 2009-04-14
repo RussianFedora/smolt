@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
 Version: 1.2
-Release: 4.1%{?dist}
+Release: 4.2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -133,7 +133,6 @@ rm -rf %{buildroot}
 
 %post
 /sbin/chkconfig --add smolt
-echo 'This is a fake attack.  If you see it please email me at mmcgrath@redhat.com and tell me' >> /dev/null
 
 #Randomize checkin times.
 TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
@@ -180,6 +179,9 @@ fi
 %{_bindir}/smoltGui
 
 %changelog
+* Tue Apr 14 2009 Mike McGrath <mmcgrath@redhat.com> - 1.2-4.2
+- Removed fake attack
+
 * Fri Mar 13 2009 Mike McGrath <mmcgrath@redhat.com> - 1.2-4.1
 - Fixed some formatting in the spec file
 - Added note to %post
