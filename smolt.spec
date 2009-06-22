@@ -146,6 +146,14 @@ if [ $1 = 0 ]; then
         /sbin/chkconfig --del smolt
 fi
 
+%post gui
+touch --no-create %{_datadir}/icons/hicolor || :
+%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+
+%postun gui
+touch --no-create %{_datadir}/icons/hicolor || :
+%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README GPL doc/*
