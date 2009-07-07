@@ -1,7 +1,7 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 1.2
-Release: 4.2%{?dist}
+Version: 1.3
+Release: 1%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -80,6 +80,7 @@ cd ..
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/gate.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/os_detect.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/fs_util.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/man/* %{buildroot}/%{_mandir}/man1/
@@ -146,6 +147,20 @@ if [ $1 = 0 ]; then
         /sbin/chkconfig --del smolt
 fi
 
+%post server
+#Fail, will fix later
+for f in delete.html deviceclass.html device.html devices.html error.html \
+         link.html login.html master.html myHosts.html notLoaded.html \
+         pub_uuid.html raw.html report_device_ratings.html \
+         report_host_ratings.html report_recent.html report_search_devices.html\
+         report_search.html report_search_profiles.html report_view_device.html\
+         report_view_devices.html report_view.html report_view_profile.html \
+         report_view_profiles.html showall.html show.html stats.html token.html\
+         welcome.html
+do
+    touch %{_datadir}/%{name}/smoon/hardware/static/stats/$f
+done
+
 %post gui
 touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
@@ -187,6 +202,10 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Jul 02 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3-1
+- Added touch for generated stats
+- Upstream released new version
+
 * Tue Apr 14 2009 Mike McGrath <mmcgrath@redhat.com> - 1.2-4.2
 - Removed fake attack
 
