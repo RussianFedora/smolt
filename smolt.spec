@@ -1,6 +1,6 @@
 Name: smolt
 Summary: Fedora hardware profiler
-Version: 1.3
+Version: 1.3.1
 Release: 1%{?dist}
 License: GPLv2+
 Group: Applications/Internet
@@ -204,6 +204,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Jul 09 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3.1-1
+- Upstream released new version
+
 * Thu Jul 02 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3-1
 - Added touch for generated stats
 - Upstream released new version
