@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -203,6 +203,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Thu Jul 02 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3-1
 - Added touch for generated stats
 - Upstream released new version
