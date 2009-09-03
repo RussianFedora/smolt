@@ -1,8 +1,8 @@
 Name: smolt
 
 Summary: Fedora hardware profiler
-Version: 1.3
-Release: 2%{?dist}
+Version: 1.3.2
+Release: 1%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -20,6 +20,7 @@ Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
 Requires(preun): /sbin/service
 Requires(postun): /sbin/service
+Requires: python-simplejson
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -79,7 +80,6 @@ cd ..
 %{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__mkdir} -p %{buildroot}/%{_mandir}/man1/
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
-%{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/gate.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/os_detect.py %{buildroot}/%{_datadir}/%{name}/client/
@@ -112,13 +112,16 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/themes/default/smolt.png
 
 %{__rm} -f %{buildroot}/%{_bindir}/smoltSendProfile %{buildroot}/%{_bindir}/smoltDeleteProfile %{buildroot}/%{_bindir}/smoltGui
+%{__rm} -f %{buildroot}/%{_datadir}/%{name}/client/config.py
+
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
-
 ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
+
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
+%{__rm} -f %{buildroot}/%{_datadir}/applications/smolt.desktop
 %find_lang %{name}
 
 # Cleanup from the Makefile (will be cleaned up when it is finalized)
@@ -176,8 +179,8 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %dir %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}/
 %{_datadir}/%{name}/client
-%ghost %{_datadir}/%{name}/client/scan.pyc
-%ghost %{_datadir}/%{name}/client/scan.pyo
+#%ghost %{_datadir}/%{name}/client/scan.pyc
+#%ghost %{_datadir}/%{name}/client/scan.pyo
 %{_datadir}/%{name}/doc
 %{_bindir}/smoltSendProfile
 %{_bindir}/smoltDeleteProfile
@@ -203,6 +206,10 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Sep 03 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3.2-1
+- Upstream released new version
+- Changed some link and copy info
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
