@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.3.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -60,6 +60,7 @@ separate package so firstboot isn't a requisite to use smolt.
 Summary: Fedora hardware profiler gui
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
+Requires: PyQt4
 
 %description gui
 Provides smolt's gui functionality.  Not included in the default package to
@@ -206,6 +207,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Sep 10 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3.2-2
+- Added requires for PyQt4 on smolt gui
+
 * Thu Sep 03 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3.2-1
 - Upstream released new version
 - Changed some link and copy info
