@@ -1,11 +1,13 @@
 Name: smolt
+
 Summary: Fedora hardware profiler
-Version: 1.3
-Release: 1%{?dist}
+Version: 1.4
+Release: 2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
+Patch0: 0001-Client-Hopefully-fix-encoding-trouble.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: dbus-python, python-urlgrabber, gawk, python-paste
@@ -19,6 +21,7 @@ Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
 Requires(preun): /sbin/service
 Requires(postun): /sbin/service
+Requires: python-simplejson
 
 %description
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -58,6 +61,7 @@ separate package so firstboot isn't a requisite to use smolt.
 Summary: Fedora hardware profiler gui
 Group: Applications/Internet
 Requires: smolt = %{version}-%{release}
+Requires: PyQt4
 
 %description gui
 Provides smolt's gui functionality.  Not included in the default package to
@@ -65,6 +69,7 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 cd client/
@@ -78,7 +83,6 @@ cd ..
 %{__install} -d -m 0755 smoon/ %{buildroot}/%{_datadir}/%{name}/smoon/
 %{__mkdir} -p %{buildroot}/%{_mandir}/man1/
 %{__cp} -adv smoon/* %{buildroot}/%{_datadir}/%{name}/smoon/
-%{__cp} -adv client/simplejson %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/gate.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/os_detect.py %{buildroot}/%{_datadir}/%{name}/client/
@@ -111,13 +115,16 @@ touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 %{__cp} -adv client/icons/smolt-icon-48.png %{buildroot}/%{_datadir}/firstboot/themes/default/smolt.png
 
 %{__rm} -f %{buildroot}/%{_bindir}/smoltSendProfile %{buildroot}/%{_bindir}/smoltDeleteProfile %{buildroot}/%{_bindir}/smoltGui
+%{__rm} -f %{buildroot}/%{_datadir}/%{name}/client/config.py
+
 ln -s %{_datadir}/%{name}/client/sendProfile.py %{buildroot}/%{_bindir}/smoltSendProfile
 ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltDeleteProfile
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
-
 ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
+
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
+%{__rm} -f %{buildroot}/%{_datadir}/applications/smolt.desktop
 %find_lang %{name}
 
 # Cleanup from the Makefile (will be cleaned up when it is finalized)
@@ -175,8 +182,8 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %dir %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}/
 %{_datadir}/%{name}/client
-%ghost %{_datadir}/%{name}/client/scan.pyc
-%ghost %{_datadir}/%{name}/client/scan.pyo
+#%ghost %{_datadir}/%{name}/client/scan.pyc
+#%ghost %{_datadir}/%{name}/client/scan.pyo
 %{_datadir}/%{name}/doc
 %{_bindir}/smoltSendProfile
 %{_bindir}/smoltDeleteProfile
@@ -202,6 +209,22 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Mon Sep 21 2009 Mike McGrath <mmcgrath@redhat.com> 1.4-2
+- Patched issue with translations (already upstream)
+
+* Mon Sep 14 2009 Mike McGrath <mmcgrath@redhat.com> 1.4-1
+- Upstream released new version
+
+* Thu Sep 10 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3.2-2
+- Added requires for PyQt4 on smolt gui
+
+* Thu Sep 03 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3.2-1
+- Upstream released new version
+- Changed some link and copy info
+
+* Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Thu Jul 02 2009 Mike McGrath <mmcgrath@redhat.com> - 1.3-1
 - Added touch for generated stats
 - Upstream released new version
