@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -10,6 +10,7 @@ Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 Patch0: 0001-Client-Hopefully-fix-encoding-trouble.patch
 Patch1: 0001-rhpl.iconv-is-not-required-anymore-by-firstboot.patch
 Patch2: 0002-fixes-the-p-option.patch
+Patch3: 0001-Don-t-print-information-about-the-pager-when-using.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: dbus-python, python-urlgrabber, gawk, python-paste
@@ -74,6 +75,7 @@ ensure that deps are kept small.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 cd client/
@@ -213,7 +215,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
-* Tue Oct 13 2009 Mike McGrath <mmcgrath@redhat.com> 1.4-3
+* Tue Oct 13 2009 Mike McGrath <mmcgrath@redhat.com> 1.4-4
 - Fixing firstboot for F-12
 
 * Mon Sep 21 2009 Mike McGrath <mmcgrath@redhat.com> 1.4-2
