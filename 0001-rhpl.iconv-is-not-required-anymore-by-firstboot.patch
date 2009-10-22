@@ -1,0 +1,24 @@
+From 53273792667e5113972e3de85731123a30c4f288 Mon Sep 17 00:00:00 2001
+From: Mike McGrath <mmcgrath@redhat.com>
+Date: Tue, 13 Oct 2009 11:46:53 -0500
+Subject: [PATCH 1/2] rhpl.iconv is not required anymore by firstboot
+
+---
+ client/smoltFirstBoot.py |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/client/smoltFirstBoot.py b/client/smoltFirstBoot.py
+index 6ce3a2a..9c44d1c 100644
+--- a/client/smoltFirstBoot.py
++++ b/client/smoltFirstBoot.py
+@@ -3,7 +3,6 @@ import string
+ import gtk
+ import gobject
+ import sys
+-import rhpl.iconv
+ import os
+ import subprocess
+ import commands
+-- 
+1.6.2.5
+
