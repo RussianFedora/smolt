@@ -1,0 +1,26 @@
+From bbcac174a9392c3b3ed3facd3a5e79b754469759 Mon Sep 17 00:00:00 2001
+From: Mike McGrath <mmcgrath@redhat.com>
+Date: Tue, 13 Oct 2009 12:57:27 -0500
+Subject: [PATCH] Don't print information about the pager when using -p
+
+---
+ client/sendProfile.py |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/client/sendProfile.py b/client/sendProfile.py
+index dcf60a3..80f2c37 100644
+--- a/client/sendProfile.py
++++ b/client/sendProfile.py
+@@ -165,7 +165,8 @@ if opts.scanOnly:
+ if not opts.autoSend:
+     if opts.printOnly:
+         for line in profile.getProfile():
+-            print line
++            if not line.startswith('#'):
++                print line
+         sys.exit(0)
+ 
+     def inner_indent(text):
+-- 
+1.6.2.5
+
