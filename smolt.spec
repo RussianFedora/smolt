@@ -1,7 +1,7 @@
 Name: smolt
 
 Summary: Fedora hardware profiler
-Version: 1.4.2
+Version: 1.4.2.2
 Release: 1%{?dist}
 License: GPLv2+
 Group: Applications/Internet
@@ -120,7 +120,6 @@ ln -s %{_datadir}/%{name}/client/deleteProfile.py %{buildroot}/%{_bindir}/smoltD
 ln -s %{_datadir}/%{name}/client/smoltGui.py %{buildroot}/%{_bindir}/smoltGui
 ln -s %{_sysconfdir}/%{name}/config.py %{buildroot}/%{_datadir}/%{name}/client/config.py
 
-
 desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applications client/smolt.desktop
 %{__rm} -f %{buildroot}/%{_datadir}/applications/smolt.desktop
 %find_lang %{name}
@@ -207,6 +206,10 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Mar 19 2010 Mike McGrath <mmcgrath@redhat.com> 1.4.2.2-1
+- Upstream released new version
+- More translations
+
 * Mon Jan 25 2010 Mike McGrath <mmcgrath@redhat.com> 1.4.2-1
 - Upstream released new version
 - Added hal requires
