@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.2.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -206,6 +206,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Aug 11 2010 David Malcolm <dmalcolm@redhat.com> - 1.4.2.2-2
+- recompiling .py files against Python 2.7 (rhbz#623361)
+
 * Thu Mar 19 2010 Mike McGrath <mmcgrath@redhat.com> 1.4.2.2-1
 - Upstream released new version
 - More translations
