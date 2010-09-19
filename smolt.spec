@@ -190,7 +190,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_sysconfdir}/cron.d/%{name}
 %{_mandir}/man1/*gz
 %{_initrddir}/%{name}
-%ghost %config(noreplace) %{_sysconfdir}/sysconfig/hw-uuid
+%ghost %config(noreplace) %{_sysconfdir}/%{name}/hw-uuid
 
 %files server
 %defattr(-,root,root,-)
