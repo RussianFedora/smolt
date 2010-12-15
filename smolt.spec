@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.2.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -38,7 +38,6 @@ Requires: smolt = %{version}-%{release}
 Requires: python-genshi
 Requires: python-crypto
 Requires: TurboGears mx
-Requires: python-turboflot
 
 %description server
 The Fedora hardware profiler is a server-client system that does a hardware
@@ -208,6 +207,10 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Wed Dec 15 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-4
+- Removed smolt server dep for turboflot since it doesn't exist
+-   A permanent solution to this is still being worked on
+
 * Mon Aug 16 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-3
 - Patch to fix bz#624215
 
