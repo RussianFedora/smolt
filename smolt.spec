@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.2.2
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -128,6 +128,7 @@ desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applicatio
 # Cleanup from the Makefile (will be cleaned up when it is finalized)
 %{__rm} -f %{buildroot}/etc/init.d/smolt
 %{__rm} -f %{buildroot}/etc/smolt/hw-uuid
+%{__rm} -f %{buildroot}/etc/sysconfig/hw-uuid
 
 %clean
 rm -rf %{buildroot}
@@ -145,6 +146,7 @@ TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
 /bin/awk '{ srand(); if($2 == 1 && $3 == 1) print $1,int((rand() * 100) % 22 + 1),int((rand() * 100) % 27 + 1),substr($0,index($0,$4)); else print $0}' /etc/cron.d/smolt > $TMPFILE
 /bin/cp $TMPFILE /etc/cron.d/smolt
 /bin/rm -f $TMPFILE
+
 
 %preun
 if [ $1 = 0 ]; then
@@ -189,7 +191,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_sysconfdir}/cron.d/%{name}
 %{_mandir}/man1/*gz
 %{_initrddir}/%{name}
-%config(noreplace)  %{_sysconfdir}/%{name}/hw-uuid
+%ghost %config(noreplace) %attr(0644,root,root) %{_sysconfdir}/%{name}/hw-uuid
 
 %files server
 %defattr(-,root,root,-)
@@ -207,7 +209,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
-* Wed Dec 15 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-7
+* Wed Dec 15 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-8
 - Removed smolt server dep for turboflot since it doesn't exist
 -   A permanent solution to this is still being worked on
 - Added explicit attributes on hw-uuid
