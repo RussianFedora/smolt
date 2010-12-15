@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.2.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -189,7 +189,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_sysconfdir}/cron.d/%{name}
 %{_mandir}/man1/*gz
 %{_initrddir}/%{name}
-%ghost %config(noreplace) %{_sysconfdir}/%{name}/hw-uuid
+%ghost %config(noreplace) %attr(0644) %{_sysconfdir}/%{name}/hw-uuid
 
 %files server
 %defattr(-,root,root,-)
@@ -207,9 +207,10 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
-* Wed Dec 15 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-4
+* Wed Dec 15 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-5
 - Removed smolt server dep for turboflot since it doesn't exist
 -   A permanent solution to this is still being worked on
+- Added explicit attributes on hw-uuid
 
 * Mon Aug 16 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-3
 - Patch to fix bz#624215
