@@ -2,11 +2,12 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.2.2
-Release: 1%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
+Patch0: 0001-fixing-encoding-issue.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: dbus-python, python-urlgrabber, gawk, python-paste, hal
@@ -68,6 +69,7 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 cd client/
@@ -206,6 +208,12 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Mon Aug 16 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-3
+- Patch to fix bz#624215
+
+* Wed Aug 11 2010 David Malcolm <dmalcolm@redhat.com> - 1.4.2.2-2
+- recompiling .py files against Python 2.7 (rhbz#623361)
+
 * Thu Mar 19 2010 Mike McGrath <mmcgrath@redhat.com> 1.4.2.2-1
 - Upstream released new version
 - More translations
