@@ -2,12 +2,13 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.2.2
-Release: 3%{?dist}
+Release: 3%{?dist}.1
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 Patch0: 0001-fixing-encoding-issue.patch
+Patch1: smolt-1.4.2.2-rfremix.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: dbus-python, python-urlgrabber, gawk, python-paste, hal
@@ -70,6 +71,7 @@ ensure that deps are kept small.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 cd client/
@@ -208,6 +210,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Mon Oct 18 2010 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.2.2-3.1
+- added RFRemix to os list
+
 * Mon Aug 16 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-3
 - Patch to fix bz#624215
 
