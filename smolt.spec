@@ -1,16 +1,16 @@
 Name: smolt
 
 Summary: Fedora hardware profiler
-Version: 1.4.2.2
-Release: 8%{?dist}
+Version: 1.4.3
+Release: 3%{?dist}.1
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
-Patch0: 0001-fixing-encoding-issue.patch
+Patch0:	smolt-1.4.2.2-rfremix.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires: dbus-python, python-urlgrabber, gawk, python-paste, hal
+Requires: dbus-python, python-urlgrabber, gawk, python-paste
 BuildArch: noarch
 BuildRequires: gettext
 BuildRequires: desktop-file-utils
@@ -68,7 +68,7 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch0 -p1 -b .rfremix
 
 %build
 cd client/
@@ -85,6 +85,9 @@ cd ..
 %{__cp} client/scan.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/gate.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/os_detect.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/devicelist.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} client/hwdata.py %{buildroot}/%{_datadir}/%{name}/client/
+%{__cp} -av client/distros %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/fs_util.py %{buildroot}/%{_datadir}/%{name}/client/
 %{__cp} client/man/* %{buildroot}/%{_mandir}/man1/
 
@@ -129,6 +132,7 @@ desktop-file-install --vendor='fedora' --dir=%{buildroot}/%{_datadir}/applicatio
 %{__rm} -f %{buildroot}/etc/init.d/smolt
 %{__rm} -f %{buildroot}/etc/smolt/hw-uuid
 %{__rm} -f %{buildroot}/etc/sysconfig/hw-uuid
+%{__rm} -rf %{buildroot}/usr/share/sugar/
 
 %clean
 rm -rf %{buildroot}
@@ -209,6 +213,19 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Mar 17 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-3.1
+- rfremixify
+
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Wed Feb 02 2011 Adam Williamson <awilliam@redhat.com> - 1.4.3-2
+- Include missing files from client/ directory
+
+* Tue Jan 11 2011 Mike McGrath <mmcgrath@redhat.com> - 1.4.3-1
+- Removed hal dep
+- Upstream released new version
+
 * Wed Dec 15 2010 Mike McGrath <mmcgrath@redhat.com> - 1.4.2.2-8
 - Removed smolt server dep for turboflot since it doesn't exist
 -   A permanent solution to this is still being worked on
