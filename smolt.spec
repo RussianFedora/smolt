@@ -2,12 +2,13 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.3
-Release: 3%{?dist}.1
+Release: 5%{?dist}.1.R
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
-Patch0:	smolt-1.4.2.2-rfremix.patch
+Patch0: smolt-linux3.patch
+Patch1: smolt-1.4.2.2-rfremix.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: dbus-python, python-urlgrabber, gawk, python-paste
@@ -17,10 +18,6 @@ BuildRequires: desktop-file-utils
 
 Requires(pre): %{_sbindir}/groupadd
 Requires(pre): %{_sbindir}/useradd
-Requires(post): /sbin/chkconfig
-Requires(preun): /sbin/chkconfig
-Requires(preun): /sbin/service
-Requires(postun): /sbin/service
 Requires: python-simplejson
 
 %description
@@ -68,7 +65,8 @@ ensure that deps are kept small.
 
 %prep
 %setup -q
-%patch0 -p1 -b .rfremix
+%patch0 -p1 -b .linux3
+%patch1 -p1 -b .rfremix
 
 %build
 cd client/
@@ -93,10 +91,8 @@ cd ..
 
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/sysconfig/
 %{__mkdir} -p %{buildroot}/%{_datadir}/firstboot/modules/
-%{__mkdir} -p %{buildroot}/%{_initrddir}
 
 %{__mv} client/smoltFirstBoot.py %{buildroot}/%{_datadir}/firstboot/modules/smolt.py
-%{__mv} client/smolt-init %{buildroot}/%{_initrddir}/smolt
 
 touch %{buildroot}/%{_sysconfdir}/sysconfig/hw-uuid
 
@@ -143,20 +139,12 @@ rm -rf %{buildroot}
                                -c 'Smolt' -g %{name} %{name} &>/dev/null || :
 
 %post
-/sbin/chkconfig --add smolt
-
 #Randomize checkin times.
 TMPFILE=$(/bin/mktemp /tmp/smolt.XXXXX)
 /bin/awk '{ srand(); if($2 == 1 && $3 == 1) print $1,int((rand() * 100) % 22 + 1),int((rand() * 100) % 27 + 1),substr($0,index($0,$4)); else print $0}' /etc/cron.d/smolt > $TMPFILE
 /bin/cp $TMPFILE /etc/cron.d/smolt
 /bin/rm -f $TMPFILE
 
-
-%preun
-if [ $1 = 0 ]; then
-        /sbin/service smolt stop >/dev/null 2>&1
-        /sbin/chkconfig --del smolt
-fi
 
 %post server
 #Fail, will fix later
@@ -194,7 +182,6 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %config(noreplace) /%{_sysconfdir}/%{name}/config*
 %{_sysconfdir}/cron.d/%{name}
 %{_mandir}/man1/*gz
-%{_initrddir}/%{name}
 %ghost %config(noreplace) %attr(0644,root,root) %{_sysconfdir}/%{name}/hw-uuid
 
 %files server
@@ -213,8 +200,14 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
-* Thu Mar 17 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-3.1
+* Fri Sep 25 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-5.1.R
 - rfremixify
+
+* Thu Aug 25 2011 Orion Poplawski <orion@cora.nwra.com> - 1.4.3-5
+- Add patch to support linux kernel versions 3+ (bug #722859)
+
+* Mon Jul 20 2011 Will Woods <wwoods@redhat.com> - 1.4.3-4
+- Remove useless initscript. (Disable the cron job to turn smolt off.)
 
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
