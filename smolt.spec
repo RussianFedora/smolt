@@ -2,7 +2,7 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.3
-Release: 5%{?dist}.1.R
+Release: 6%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
@@ -200,6 +200,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Thu Mar 15 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-6.R
+- rebuilt
+
 * Fri Sep 25 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-5.1.R
 - rfremixify
 
