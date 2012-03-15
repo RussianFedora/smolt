@@ -200,7 +200,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
-* Thu Mar 15 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-6.R
+* Thu Mar 15 2012 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-6.R
 - rebuilt
 
 * Fri Sep 25 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-5.1.R
