@@ -2,13 +2,12 @@ Name: smolt
 
 Summary: Fedora hardware profiler
 Version: 1.4.3
-Release: 5%{?dist}.1.R
+Release: 5.2%{?dist}
 License: GPLv2+
 Group: Applications/Internet
 URL: http://fedorahosted.org/smolt
 Source: https://fedorahosted.org/releases/s/m/%{name}/%{name}-%{version}.tar.gz
 Patch0: smolt-linux3.patch
-Patch1: smolt-1.4.2.2-rfremix.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: dbus-python, python-urlgrabber, gawk, python-paste
@@ -66,7 +65,6 @@ ensure that deps are kept small.
 %prep
 %setup -q
 %patch0 -p1 -b .linux3
-%patch1 -p1 -b .rfremix
 
 %build
 cd client/
@@ -200,6 +198,9 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/smoltGui
 
 %changelog
+* Mon Mar 26 2012 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-5.2
+- drop rfremix patch
+
 * Fri Sep 25 2011 Arkady L. Shane <ashejn@yandex-team.ru> - 1.4.3-5.1.R
 - rfremixify
 
